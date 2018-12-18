@@ -1,8 +1,9 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 
 import Content from "./Content";
+import EditContent from "./EditContent";
 import Home from "./Home";
 import "./index.scss";
 import Login from "./Login";
@@ -63,7 +64,10 @@ class App extends React.Component<{}, IState> {
         <Button variant="outlined" onClick={this.handleSignOut}>
           Sign out
         </Button>
+        <Link to="/">Home</Link>
+        <Link to="/content">Content</Link>
         <Switch>
+          <Route path="/editcontent/:id" component={EditContent} />
           <Route path="/content" component={Content} />
           <Route path="/" component={Home} />
         </Switch>

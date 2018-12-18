@@ -1,10 +1,11 @@
 import * as firebase from "firebase";
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 import * as fs from "./firebaseService";
 
 export interface IState {
-  content: any[];
+  content: firebase.firestore.QueryDocumentSnapshot[];
 }
 
 export default class Content extends React.Component<{}, IState> {
@@ -24,7 +25,7 @@ export default class Content extends React.Component<{}, IState> {
       .collection("content")
       .onSnapshot(snapshot => {
         this.setState({
-          content: snapshot.docs.map(d => d.data())
+          content: snapshot.docs
         });
       });
   }
@@ -40,7 +41,9 @@ export default class Content extends React.Component<{}, IState> {
         <ul>
           {this.state.content.map(c => (
             <li>
-              {c.title} &mdash; {c.type}
+              <Link to={`/editcontent/${c.id}`}>
+                {c.get("title")} &mdash; {c.get("type")}
+              </Link>
             </li>
           ))}
         </ul>
