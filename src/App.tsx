@@ -9,10 +9,17 @@ import "./index.scss";
 import Login from "./Login";
 
 import * as fs from "./firebaseService";
+import "./util/typography";
+
+import "typeface-cormorant-infant";
+import "typeface-raleway";
 
 export interface IState {
   isSignedIn: boolean;
 }
+
+const HomeLink = (props: any) => <Link to="/" {...props} />;
+const ContentLink = (props: any) => <Link to="/content" {...props} />;
 
 class App extends React.Component<{}, IState> {
   private unregisterAuthObserver: firebase.Unsubscribe;
@@ -61,11 +68,19 @@ class App extends React.Component<{}, IState> {
     return (
       <div>
         Hello there {user ? user.displayName : "not logged in"}
-        <Button variant="outlined" onClick={this.handleSignOut}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={this.handleSignOut}
+        >
           Sign out
         </Button>
-        <Link to="/">Home</Link>
-        <Link to="/content">Content</Link>
+        <Button component={HomeLink} variant="outlined">
+          Home
+        </Button>
+        <Button variant="outlined" component={ContentLink}>
+          Content
+        </Button>
         <Switch>
           <Route path="/editcontent/:id" component={EditContent} />
           <Route path="/content" component={Content} />
