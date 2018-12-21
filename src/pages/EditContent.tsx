@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import * as React from "react";
 import * as RRD from "react-router-dom";
 
-import * as fs from "./firebaseService";
+import * as fs from "../firebaseService";
 import Story from "./Story";
 
 export interface IParams {
@@ -17,7 +17,8 @@ export interface IState {
 
 const COLLECTION = "content";
 
-export default class Content extends React.Component<
+// TODO get rid of clone deeps
+export default class EditContent extends React.Component<
   RRD.RouteComponentProps<IParams>,
   IState
 > {
@@ -28,6 +29,8 @@ export default class Content extends React.Component<
 
     this.state = {};
 
+    this.handleAddParagraph = this.handleAddParagraph.bind(this);
+    this.handleDeleteParagraph = this.handleDeleteParagraph.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
   }
@@ -47,22 +50,37 @@ export default class Content extends React.Component<
     this.unregisterObserver();
   }
 
+  public handleAddParagraph() {
+    const content = _.cloneDeep(this.state.content);
+    (content.story as string[]).push("");
+    this.setState({ content });
+  }
+
+  public handleDeleteParagraph(i: number) {
+    const content = _.cloneDeep(this.state.content);
+    _.pullAt(content.story, i);
+    this.setState({ content });
+  }
+
   public handleChange(event: any) {
     let value = event.target.value;
-    if (typeof this.state.content[event.target.name] === "number") {
+    if (typeof _.get(this.state.content, event.target.name) === "number") {
       value = Number(event.target.value);
+    } else {
+      value = (value as string).replace("\n", "");
     }
-    _.set(this.state.content, event.target.name, value);
-    this.setState({});
+    const content = _.cloneDeep(this.state.content);
+    _.set(content, event.target.name, value);
+    this.setState({ content });
   }
 
   public handleSave() {
-    const content = _.cloneDeep(this.state.content);
-    content.story = content.story.split("\n");
     fs.db()
       .collection(COLLECTION)
       .doc(this.props.match.params.id)
-      .set(content, { merge: true });
+      .set(this.state.content, { merge: true })
+      .then(() => alert("Saved!"))
+      .catch(err => alert(JSON.stringify(err)));
   }
 
   public render() {
@@ -77,6 +95,8 @@ export default class Content extends React.Component<
         view = (
           <Story
             {...content}
+            onDeleteParagraph={this.handleDeleteParagraph}
+            onAddParagraph={this.handleAddParagraph}
             onChange={this.handleChange}
             onSave={this.handleSave}
           />

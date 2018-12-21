@@ -2,11 +2,11 @@ import { Button } from "@material-ui/core";
 import * as React from "react";
 import { Link, Route, Switch } from "react-router-dom";
 
-import Content from "./Content";
-import EditContent from "./EditContent";
-import Home from "./Home";
 import "./index.scss";
-import Login from "./Login";
+import Content from "./pages/Content";
+import EditContent from "./pages/EditContent";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 import * as fs from "./firebaseService";
 import "./util/typography";

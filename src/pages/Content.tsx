@@ -2,7 +2,7 @@ import * as firebase from "firebase";
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import * as fs from "./firebaseService";
+import * as fs from "../firebaseService";
 
 export interface IState {
   content: firebase.firestore.QueryDocumentSnapshot[];
