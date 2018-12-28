@@ -3,14 +3,14 @@ import * as _ from "lodash";
 import * as React from "react";
 import * as RRD from "react-router-dom";
 
-import * as fs from "../firebaseService";
+import * as fs from "../services/firebaseService";
 import Story from "./Story";
 
-export interface IParams {
+export interface Params {
   id: string;
 }
 
-export interface IState {
+export interface State {
   content?: any;
   error?: Error;
 }
@@ -19,8 +19,8 @@ const COLLECTION = "content";
 
 // TODO get rid of clone deeps
 export default class EditContent extends React.Component<
-  RRD.RouteComponentProps<IParams>,
-  IState
+  RRD.RouteComponentProps<Params>,
+  State
 > {
   private unregisterObserver: firebase.Unsubscribe;
 

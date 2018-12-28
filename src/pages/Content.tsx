@@ -4,13 +4,13 @@ import * as log from "loglevel";
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import * as fs from "../firebaseService";
+import * as fs from "../services/firebaseService";
 
-export interface IState {
+export interface State {
   content: Array<Array<Record<string, firestore.DocumentSnapshot>>>;
 }
 
-export default class Content extends React.Component<{}, IState> {
+export default class Content extends React.Component<{}, State> {
   private unregisterObserver: Unsubscribe;
 
   constructor(props: any) {

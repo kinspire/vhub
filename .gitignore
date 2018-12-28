@@ -1,2 +1,6 @@
 build/
 node_modules/
+.gitsecret/keys/random_seed
+
+# Git secret
+public/index.html

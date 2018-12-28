@@ -1,7 +1,7 @@
 import { Button, TextField } from "@material-ui/core";
 import * as React from "react";
 
-export interface IProps {
+export interface Props {
   classLevel: number;
   num: number;
   questions: any[];
@@ -15,7 +15,7 @@ export interface IProps {
   onSave: () => void;
 }
 
-export default class Story extends React.Component<IProps> {
+export default class Story extends React.Component<Props> {
   public render() {
     const {
       classLevel,

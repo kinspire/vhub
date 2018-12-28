@@ -4,7 +4,7 @@ const typography = new Typography({
   baseFontSize: "18px",
   baseLineHeight: 1.45,
   bodyFontFamily: ["Raleway", "sans-serif"],
-  headerFontFamily: ["Cormorant Infant", "serif"]
+  headerFontFamily: ["Raleway", "sans-serif"],
 });
 
 // Hot reload typography in development.

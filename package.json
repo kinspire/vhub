@@ -15,6 +15,8 @@
     "react-helmet": "^5.2.0",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
+    "react-trello": "^2.0.7",
+    "trello": "^0.9.1",
     "typeface-cormorant-infant": "^0.0.54",
     "typeface-raleway": "^0.0.54",
     "typography": "^0.16.18"

@@ -1,8 +1,11 @@
+import * as log from "loglevel";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
+
+log.setLevel("debug");
 
 ReactDOM.render(
   <BrowserRouter basename="/vhub">

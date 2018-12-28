@@ -7,28 +7,30 @@ import Content from "./pages/Content";
 import EditContent from "./pages/EditContent";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Tasks from "./pages/Tasks";
 
-import * as fs from "./firebaseService";
+import * as fs from "./services/firebaseService";
 import "./util/typography";
 
 import "typeface-cormorant-infant";
 import "typeface-raleway";
 
-export interface IState {
+export interface State {
   isSignedIn: boolean;
 }
 
 const HomeLink = (props: any) => <Link to="/" {...props} />;
 const ContentLink = (props: any) => <Link to="/content" {...props} />;
+const TasksLink = (props: any) => <Link to="/tasks" {...props} />;
 
-class App extends React.Component<{}, IState> {
+class App extends React.Component<{}, State> {
   private unregisterAuthObserver: firebase.Unsubscribe;
 
   constructor(props: any) {
     super(props);
 
     this.state = {
-      isSignedIn: false
+      isSignedIn: false,
     };
   }
 
@@ -81,9 +83,13 @@ class App extends React.Component<{}, IState> {
         <Button variant="outlined" component={ContentLink}>
           Content
         </Button>
+        <Button variant="outlined" component={TasksLink}>
+          Tasks
+        </Button>
         <Switch>
           <Route path="/editcontent/:id" component={EditContent} />
           <Route path="/content" component={Content} />
+          <Route path="/tasks" component={Tasks} />
           <Route path="/" component={Home} />
         </Switch>
       </div>
