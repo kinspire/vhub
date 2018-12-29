@@ -13,3 +13,12 @@ export const get = (
     }
   });
 };
+
+export const colorMap = (color: Color): string => {
+  switch (color) {
+    case "sky":
+      return "skyblue";
+    default:
+      return color.toString();
+  }
+};

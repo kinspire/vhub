@@ -3,16 +3,13 @@ import * as log from "loglevel";
 import * as React from "react";
 import Board from "react-trello";
 
-import * as trello from "../services/trelloService";
+import * as util from "../util/trelloUtil";
 
 interface State {
   boardData: any;
   boards: any[];
   currentBoard: string;
-}
-
-enum ElementName {
-  currentBoard = "currentBoard",
+  labels: Label[];
 }
 
 export default class Tasks extends React.Component<{}, State> {
@@ -25,6 +22,7 @@ export default class Tasks extends React.Component<{}, State> {
       },
       boards: [],
       currentBoard: "",
+      labels: [],
     };
 
     this.handleAuthorized = this.handleAuthorized.bind(this);
@@ -47,30 +45,48 @@ export default class Tasks extends React.Component<{}, State> {
 
   public handleAuthorized() {
     log.debug("authorized");
-    trello
-      .get(`/organizations/${trello.ORGANIZATION_ID}/boards`, {
+    util
+      .get(`/organizations/${util.ORGANIZATION_ID}/boards`, {
         filter: "open",
       })
-      .then(boards => this.setState({ boards }));
+      .then(boards =>
+        this.setState({ boards, currentBoard: boards[0].id }, this.fetchBoard)
+      );
   }
 
-  public fetchBoard(boardId: string) {
-    (trello.get(`/boards/${boardId}/lists/open`) as Promise<List[]>)
-      .then(lists =>
-        Promise.all(
+  public fetchBoard() {
+    Promise.all([
+      util.get(`/boards/${this.state.currentBoard}/lists/open`) as Promise<
+        List[]
+      >,
+      util.get(`/boards/${this.state.currentBoard}/labels`) as Promise<Label[]>,
+    ])
+      .then(([lists, labels]) => {
+        this.setState({ labels });
+
+        return Promise.all(
           lists.map(list =>
             Promise.all([
               Promise.resolve(list),
-              trello.get(`/lists/${list.id}/cards`) as Promise<Card[]>,
+              util.get(`/lists/${list.id}/cards`) as Promise<Card[]>,
             ])
           )
-        )
-      )
+        );
+      })
       .then(res => {
         // Main conversion of Trello data format to React Trello format
         const lanes = res.map(([list, cards]) => {
           return Object.assign(list, {
-            cards: cards.map(card => ({ title: card.name, ...card })),
+            cards: cards.map(card => ({
+              description: card.desc,
+              style: {
+                backgroundColor: card.labels.length
+                  ? util.colorMap(card.labels[0].color)
+                  : undefined,
+              },
+              title: card.name,
+              ...card,
+            })),
             title: list.name,
           });
         });
@@ -83,10 +99,12 @@ export default class Tasks extends React.Component<{}, State> {
   public handleChange(event: React.FormEvent) {
     log.debug("queried");
     const boardId = (event.target as any).value;
-    this.setState({
-      [(event.target as any).name as ElementName]: boardId,
-    });
-    this.fetchBoard(boardId);
+    this.setState(
+      {
+        currentBoard: boardId,
+      },
+      this.fetchBoard
+    );
   }
 
   public render() {
@@ -97,6 +115,21 @@ export default class Tasks extends React.Component<{}, State> {
         {b.name}
       </MenuItem>
     ));
+
+    const labels = this.state.labels
+      .filter(l => l.name)
+      .map(l => (
+        <span
+          key={l.id}
+          style={{
+            backgroundColor: util.colorMap(l.color),
+            margin: "0 4px",
+            padding: "2px",
+          }}
+        >
+          {l.name}
+        </span>
+      ));
 
     return (
       <div>
@@ -111,12 +144,11 @@ export default class Tasks extends React.Component<{}, State> {
               name: "currentBoard",
             }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
             {boards}
           </Select>
         </FormControl>
+        This board's labels:
+        {labels}
         <Board data={data} />
       </div>
     );
