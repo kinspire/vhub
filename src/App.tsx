@@ -12,7 +12,6 @@ import Tasks from "./pages/Tasks";
 import * as fs from "./services/firebaseService";
 import "./util/typography";
 
-import "typeface-cormorant-infant";
 import "typeface-raleway";
 
 export interface State {

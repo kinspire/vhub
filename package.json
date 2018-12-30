@@ -12,16 +12,14 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-firebaseui": "^3.1.2",
-    "react-helmet": "^5.2.0",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
     "react-trello": "^2.0.7",
-    "trello": "^0.9.1",
-    "typeface-cormorant-infant": "^0.0.54",
     "typeface-raleway": "^0.0.54",
     "typography": "^0.16.18"
   },
   "scripts": {
+    "analyze": "source-map-explorer build/static/js/main.*",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
@@ -41,8 +39,8 @@
     "@types/typography": "^0.16.0",
     "fs-extra": "^7.0.1",
     "gh-pages": "^2.0.1",
+    "source-map-explorer": "^1.6.0",
     "typescript": "^3.2.2"
   },
-  "proxy": "http://localhost:5000",
   "homepage": "http://kinspire.github.io/vhub"
 }

@@ -133,7 +133,6 @@ export default class Tasks extends React.Component<{}, State> {
 
     return (
       <div>
-        Your boards:
         <FormControl>
           <InputLabel htmlFor="currentBoard">Choose Board</InputLabel>
           <Select
