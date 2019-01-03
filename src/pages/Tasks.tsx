@@ -55,14 +55,16 @@ export default class Tasks extends React.Component<{}, State> {
   }
 
   public fetchBoard() {
+    let labels: Label[];
+
     Promise.all([
       util.get(`/boards/${this.state.currentBoard}/lists/open`) as Promise<
         List[]
       >,
       util.get(`/boards/${this.state.currentBoard}/labels`) as Promise<Label[]>,
     ])
-      .then(([lists, labels]) => {
-        this.setState({ labels });
+      .then(([lists, newLabels]) => {
+        labels = newLabels;
 
         return Promise.all(
           lists.map(list =>
@@ -91,7 +93,7 @@ export default class Tasks extends React.Component<{}, State> {
           });
         });
 
-        this.setState({ boardData: { lanes } });
+        this.setState({ boardData: { lanes }, labels });
       })
       .catch(err => alert(err));
   }
