@@ -8,6 +8,14 @@
     ]
   },
   "rules": {
-    "interface-name": [true, "never-prefix"]
+    "interface-name": [true, "never-prefix"],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ],
+    "object-literal-sort-keys": false
   }
 }

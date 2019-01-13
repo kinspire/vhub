@@ -1,0 +1,176 @@
+import { Button } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { /*ChevronLeft, ChevronRight,*/ Mail, Menu } from "@material-ui/icons";
+import classNames from "classnames";
+import * as React from "react";
+
+import "./index.scss";
+
+export interface Props {
+  classes: any;
+  theme: any;
+}
+
+export interface State {
+  drawerOpen: boolean;
+  isSignedIn: boolean;
+}
+
+const drawerWidth = 240;
+
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+    },
+    appBarShift: {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    menuButton: {
+      marginLeft: 12,
+      marginRight: 36,
+    },
+    hide: {
+      display: "none",
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: "nowrap",
+    },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerClose: {
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: "hidden",
+      width: theme.spacing.unit * 7 + 1,
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing.unit * 9 + 1,
+      },
+    },
+    toolbar: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      padding: "0 8px",
+      ...theme.mixins.toolbar,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing.unit * 3,
+    },
+  });
+
+class App extends React.Component<Props, State> {
+  private unregisterAuthObserver: firebase.Unsubscribe;
+
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      drawerOpen: false,
+      isSignedIn: false,
+    };
+
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.handleDrawerClose = this.handleDrawerClose.bind(this);
+  }
+
+  public handleDrawerOpen() {
+    this.setState({ drawerOpen: true });
+  }
+
+  public handleDrawerClose() {
+    this.setState({ drawerOpen: false });
+  }
+
+  public render() {
+    const { classes } = this.props;
+
+    alert(this.state.drawerOpen);
+
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={classNames(classes.appBar, {
+            [classes.appBarShift]: this.state.drawerOpen,
+          })}
+        >
+          <Toolbar disableGutters={!this.state.drawerOpen}>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerOpen}
+              className={classNames(classes.menuButton, {
+                [classes.hide]: this.state.drawerOpen,
+              })}
+            >
+              <Menu />
+            </IconButton>
+            <Typography variant="h6" color="inherit" noWrap={true}>
+              Volunteer Hub
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          className={classNames(classes.drawer, {
+            [classes.drawerOpen]: this.state.drawerOpen,
+            [classes.drawerClose]: !this.state.drawerOpen,
+          })}
+          classes={{
+            paper: classNames({
+              [classes.drawerOpen]: this.state.drawerOpen,
+              [classes.drawerClose]: !this.state.drawerOpen,
+            }),
+          }}
+          open={this.state.drawerOpen}
+        >
+          <div className={classes.toolbar} />
+          <Divider />
+          <List>
+            {["Inbox", "Starred", "Send email", "Drafts"].map(text => (
+              <ListItem button={true} key={text}>
+                <ListItemIcon>
+                  <Mail />
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+        </main>
+      </div>
+    );
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(App);

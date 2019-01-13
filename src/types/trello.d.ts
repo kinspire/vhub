@@ -11,19 +11,58 @@ declare type Color =
   | "lime"
   | "null";
 
-declare interface Label extends Record<string, any> {
+declare interface TrelloLabel {
   id: string;
   idBoard: string;
   name: string;
   color: Color;
 }
-declare interface Card extends Record<string, any> {
+declare interface TrelloCard {
   id: string;
   idList: string;
-  labels: Label[];
+  labels: TrelloLabel[];
+  name: string;
+  desc: string;
+  idChecklists: string[];
 }
-declare interface List extends Record<string, any> {
+declare interface TrelloChecklistItem {
+  state: "complete" | "incomplete";
   id: string;
+  name: string;
+  nameData?: any;
+  pos: number;
+}
+declare interface TrelloChecklist {
+  id: string;
+  idBoard: string;
+  idCard: string;
+  name: string;
+  pos: number;
+  checkItems: TrelloChecklistItem[];
+}
+declare interface TrelloList {
+  id: string;
+  name: string;
+}
+declare interface TrelloBoard {
+  id: string;
+  name: string;
+}
+declare interface ReactCard {
+  id: string;
+  title: string;
+  description?: string;
+  label?: string;
+  metadata?: any;
+}
+declare interface ReactLane {
+  id: string;
+  title: string;
+  label?: string;
+  cards: ReactCard[];
+}
+declare interface ReactBoard {
+  lanes: ReactLane[];
 }
 
 declare const Trello: any;
