@@ -43,12 +43,11 @@ const styles = (theme: Theme) =>
       padding: theme.spacing.unit * 2,
       color: theme.palette.text.secondary,
     },
-    paperBackgroundColor: {
+    panel: {
       backgroundColor: palette.bg.tasksPaper,
     },
-    paperTitle: {
-      paddingBottom: theme.spacing.unit,
-      textAlign: "center",
+    panelTitle: {
+      // color: palette.fg.tasksPaper,
     },
     paperEmpty: {
       padding: theme.spacing.unit * 2.5,
@@ -104,11 +103,17 @@ class Tasks extends React.Component<Props, State> {
     return (
       <Grid item={true} md={width}>
         <ExpansionPanel
-          className={this.props.classes.paperBackgroundColor}
+          className={this.props.classes.panel}
           defaultExpanded={defaultExpanded}
         >
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">{title}</Typography>
+          <ExpansionPanelSummary
+            expandIcon={
+              <ExpandMoreIcon className={this.props.classes.panelTitle} />
+            }
+          >
+            <Typography className={this.props.classes.panelTitle} variant="h6">
+              {title}
+            </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container={true} spacing={8}>

@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as moment from "moment";
+import { CSSProperties } from "react";
 
 export enum Importance {
   LOW,
@@ -15,6 +16,23 @@ export function importanceString(i: Importance): string {
       return "Medium";
     case Importance.LOW:
       return "Low";
+  }
+}
+
+export function importanceStyle(i: Importance): CSSProperties {
+  switch (i) {
+    case Importance.HIGH:
+      return {
+        backgroundColor: "#f3bbae",
+      };
+    case Importance.MEDIUM:
+      return {
+        backgroundColor: "#f6f6c2",
+      };
+    case Importance.LOW:
+      return {
+        backgroundColor: "#75c8cc",
+      };
   }
 }
 
@@ -58,6 +76,8 @@ export enum Sort {
   DEADLINE,
   IMPORTANCE,
 }
+
+// TODO add enum deadline
 
 export interface IVolunteer extends Record<string, any> {
   name: string;
@@ -127,6 +147,7 @@ export const SAMPLE_TASKS: ITask[] = _.map(
       {
         title: "Finish skype tutor onboarding",
         subcommittees: [Subcommittee.SKYPE_TUTORING],
+        importance: Importance.LOW,
       },
     ],
     x => Object.assign(x, { volunteers: [self()] })
