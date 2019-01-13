@@ -17,6 +17,7 @@
     "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
+    "typeRoots": ["node_modules/@types", "src/types"],
     "noUnusedLocals": true
   },
   "exclude": [

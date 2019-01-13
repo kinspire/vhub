@@ -50,6 +50,7 @@ const drawerWidth = 240;
 const customTheme = createMuiTheme({
   typography: {
     fontFamily: "Raleway",
+    useNextVariants: true,
   },
 });
 
