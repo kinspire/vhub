@@ -41,6 +41,8 @@ const styles = (theme: Theme) =>
     },
     panelTitle: {
       // color: palette.fg.tasksPaper,
+      fontFamily: "Alegreya Sans",
+      textTransform: "uppercase",
     },
     paperEmpty: {
       padding: theme.spacing.unit * 2.5,
@@ -98,11 +100,7 @@ class Tasks extends React.Component<Props, State> {
           className={this.props.classes.panel}
           defaultExpanded={defaultExpanded}
         >
-          <ExpansionPanelSummary
-            expandIcon={
-              <ExpandMoreIcon className={this.props.classes.panelTitle} />
-            }
-          >
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography className={this.props.classes.panelTitle} variant="h6">
               {title}
             </Typography>

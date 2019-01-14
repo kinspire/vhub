@@ -1,5 +1,5 @@
 // Red to blue
-// const paletteOf5 = ["#f3bbae", "", "", "", "#75c8cc"];
+// const paletteOf5 = ["#f3bbae", "", "#ebeae5", "", "#75c8cc"];
 
 // TODO get "darker" colors programmatically. Maybe using HSL values?
 export default {

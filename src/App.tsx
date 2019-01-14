@@ -39,10 +39,10 @@ import EditContent from "./pages/EditContent";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Tasks from "./pages/Tasks";
-import * as fs from "./services/firebaseService";
 import palette from "./util/palette";
 import "./util/typography";
 
+import "typeface-alegreya-sans";
 import "typeface-raleway";
 
 const drawerWidth = 240;
@@ -107,10 +107,10 @@ const styles = (theme: Theme) =>
         duration: theme.transitions.duration.leavingScreen,
       }),
       overflowX: "hidden",
-      width: theme.spacing.unit * 7 + 1,
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing.unit * 9 + 1,
-      },
+      width: "56px",
+      // [theme.breakpoints.up("sm")]: {
+      //   width: theme.spacing.unit * 9 + 1,
+      // },
     },
     drawerLink: {
       textDecoration: "none",
@@ -147,36 +147,17 @@ interface State {
 
 class App extends React.Component<Props, State> {
   public state = {
-    isSignedIn: SignedInState.LOADING,
+    isSignedIn: SignedInState.SIGNED_IN,
     drawerOpen: false,
     dialogOpen: false,
   };
-  private unregisterAuthObserver: firebase.Unsubscribe;
-
-  /**
-   * @inheritDoc
-   */
-  public componentDidMount() {
-    this.unregisterAuthObserver = fs
-      .auth()
-      .onAuthStateChanged((user: firebase.User) => {
-        this.setState({
-          isSignedIn: user ? SignedInState.SIGNED_IN : SignedInState.SIGNED_OUT,
-        });
-      });
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public componentWillUnmount() {
-    if (this.unregisterAuthObserver) {
-      this.unregisterAuthObserver();
-    }
-  }
 
   public handleSignOut = () => {
-    fs.auth().signOut();
+    // TODO: Sign out
+    // fs.auth().signOut();
+    this.setState({
+      dialogOpen: false,
+    });
   };
 
   public handleClickSignOut = () => {
@@ -199,7 +180,6 @@ class App extends React.Component<Props, State> {
 
   public render() {
     const { classes, theme } = this.props;
-    const user = fs.auth().currentUser;
 
     let main;
     if (this.state.isSignedIn === SignedInState.SIGNED_OUT) {
@@ -232,8 +212,7 @@ class App extends React.Component<Props, State> {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6" color="inherit" noWrap={true}>
-                Volunteer Hub: Welcome,{" "}
-                {user ? user.displayName : "not logged in"}
+                Volunteer Hub: Welcome, Sowmya Magham
               </Typography>
             </Toolbar>
           </AppBar>

@@ -9186,6 +9186,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+typeface-alegreya-sans@^0.0.54:
+  version "0.0.54"
+  resolved "https://registry.yarnpkg.com/typeface-alegreya-sans/-/typeface-alegreya-sans-0.0.54.tgz#0d7410bc3b4795e404a82b34abd55226bc4e77ba"
+  integrity sha512-i7Fzx9smv527Ej8PSKP8btAz5nVQ/YACB3vKCTQiVk4SbLZeGJ+6X4bBq5ApWkPwDQkyrd+yHNK4NJ9R57siUQ==
+
 typeface-raleway@^0.0.54:
   version "0.0.54"
   resolved "https://registry.yarnpkg.com/typeface-raleway/-/typeface-raleway-0.0.54.tgz#f166c517becc81f34d14e72736d28b8923c79c65"
