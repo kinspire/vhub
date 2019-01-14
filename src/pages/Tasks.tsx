@@ -14,7 +14,6 @@ import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import * as _ from "lodash";
-import * as moment from "moment";
 import * as React from "react";
 
 import Task from "../components/Task";
@@ -23,9 +22,6 @@ import palette from "../util/palette";
 
 const styles = (theme: Theme) =>
   createStyles({
-    arrow: {
-      margin: "auto 0 10 0",
-    },
     formControl: {
       margin: theme.spacing.unit,
       minWidth: 160,
@@ -35,9 +31,6 @@ const styles = (theme: Theme) =>
     },
     rightHeader: {
       marginLeft: "auto",
-    },
-    selectEmpty: {
-      marginTop: theme.spacing.unit * 2,
     },
     paper: {
       padding: theme.spacing.unit * 2,
@@ -87,7 +80,6 @@ class Tasks extends React.Component<Props, State> {
     });
   };
 
-  // TODO add special case for "All"
   public filterRenderValue = (selected: vhub.Subcommittee[]): string => {
     return selected.length !== this.state.filters.length
       ? selected.map(vhub.subcommitteeString).join(", ")
@@ -128,13 +120,15 @@ class Tasks extends React.Component<Props, State> {
   }
 
   // Filter current tasks by current filter
-  public getFilterTasks = () => {
+  public getFilteredTasks = () => {
     return this.state.tasks.filter(
       t =>
         _.without(t.subcommittees, ...this.state.selectedFilter).length !==
         t.subcommittees.length
     );
   };
+
+  // TODO always filter out done before getting the view
 
   public getProgressView = (tasks: vhub.ITask[]) => {
     // Process tasks
@@ -158,32 +152,22 @@ class Tasks extends React.Component<Props, State> {
   public getDeadlineView = (tasks: vhub.ITask[]) => {
     // Process tasks
     const done = _.filter(tasks, t => t.progress === vhub.Progress.DONE);
-    // TODO make deadline enum
-    const taskSplit: Record<string, vhub.ITask[]> = {
-      overdue: [],
-      thisWeek: [],
-      later: [],
+    const taskSplit: Record<vhub.Deadline, vhub.ITask[]> = {
+      [vhub.Deadline.OVERDUE]: [],
+      [vhub.Deadline.THIS_WEEK]: [],
+      [vhub.Deadline.LATER]: [],
     };
-
-    const today = moment().endOf("d");
-    const oneWeek = moment().add(1, "weeks");
 
     // Organize
     tasks.forEach(task => {
-      if (task.deadline.isBefore(today)) {
-        taskSplit.overdue.push(task);
-      } else if (task.deadline.isBefore(oneWeek)) {
-        taskSplit.thisWeek.push(task);
-      } else {
-        taskSplit.later.push(task);
-      }
+      taskSplit[vhub.deadlineEnum(task.deadline)].push(task);
     });
 
     return (
       <Grid container={true} spacing={24}>
-        {this.getPanel("Overdue", 12, taskSplit.overdue)}
-        {this.getPanel("This Week", 12, taskSplit.thisWeek)}
-        {this.getPanel("Later", 12, taskSplit.later)}
+        {this.getPanel("Overdue", 12, taskSplit[vhub.Deadline.OVERDUE])}
+        {this.getPanel("This Week", 12, taskSplit[vhub.Deadline.THIS_WEEK])}
+        {this.getPanel("Later", 12, taskSplit[vhub.Deadline.LATER])}
         {this.getPanel("Done", 12, done, false)}
       </Grid>
     );
@@ -216,6 +200,8 @@ class Tasks extends React.Component<Props, State> {
   public render() {
     const { classes } = this.props;
 
+    // TODO add an option for "only" - so when the filter is selected only that one is chosen
+    // TODO Or also add a "None" option
     const leftHeader = (
       <span>
         <FormControl className={classes.formControl}>
@@ -270,13 +256,13 @@ class Tasks extends React.Component<Props, State> {
     let content;
     switch (this.state.selectedSort) {
       case vhub.Sort.DEADLINE:
-        content = this.getDeadlineView(this.getFilterTasks());
+        content = this.getDeadlineView(this.getFilteredTasks());
         break;
       case vhub.Sort.PROGRESS:
-        content = this.getProgressView(this.getFilterTasks());
+        content = this.getProgressView(this.getFilteredTasks());
         break;
       case vhub.Sort.IMPORTANCE:
-        content = this.getImportanceView(this.getFilterTasks());
+        content = this.getImportanceView(this.getFilteredTasks());
         break;
     }
 

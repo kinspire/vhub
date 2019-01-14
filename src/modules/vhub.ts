@@ -78,9 +78,40 @@ export enum Sort {
 }
 
 // TODO add enum deadline
+export enum Deadline {
+  OVERDUE,
+  THIS_WEEK,
+  LATER,
+}
+
+// TODO make it so that we only use this for past events and things coming up soon
+export function deadlineString(d: moment.Moment): string {
+  return d.fromNow();
+}
+
+export function deadlineEnum(d: moment.Moment): Deadline {
+  const today = moment();
+  const oneWeek = moment(today).add(1, "week");
+  if (d.isBefore(today)) {
+    return Deadline.OVERDUE;
+  } else if (d.isBefore(oneWeek)) {
+    return Deadline.THIS_WEEK;
+  } else {
+    return Deadline.LATER;
+  }
+}
 
 export interface IVolunteer extends Record<string, any> {
   name: string;
+}
+
+export function volunteerInitials(v: IVolunteer): string {
+  return v.name
+    .split(" ")
+    .reduce(
+      (acc: string, cur: string) => acc + cur.toUpperCase().charAt(0),
+      ""
+    );
 }
 
 export function self(): IVolunteer {
@@ -140,9 +171,10 @@ export const SAMPLE_TASKS: ITask[] = _.map(
         progress: Progress.IN_PROGRESS,
       },
       {
-        title: "Speak with Pranita about sponsorship",
+        title: "Discuss sponsorship",
         subcommittees: [Subcommittee.LEADERSHIP_CURRICULUM],
         importance: Importance.HIGH,
+        volunteers: [self(), { name: "Pranita Mantravadi" }],
       },
       {
         title: "Finish skype tutor onboarding",
@@ -150,7 +182,7 @@ export const SAMPLE_TASKS: ITask[] = _.map(
         importance: Importance.LOW,
       },
     ],
-    x => Object.assign(x, { volunteers: [self()] })
+    x => (x.volunteers ? x : Object.assign(x, { volunteers: [self()] }))
   ),
   x => createTask(x)
 );

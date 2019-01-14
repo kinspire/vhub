@@ -56,6 +56,9 @@ const customTheme = createMuiTheme({
 
 const styles = (theme: Theme) =>
   createStyles({
+    loading: {
+      margin: "4px",
+    },
     root: {
       display: "flex",
     },
@@ -195,18 +198,20 @@ class App extends React.Component<Props, State> {
   };
 
   public render() {
-    if (this.state.isSignedIn === SignedInState.SIGNED_OUT) {
-      return <Login />;
-    } else if (this.state.isSignedIn === SignedInState.LOADING) {
-      return "Loading...";
-    }
-
+    const { classes, theme } = this.props;
     const user = fs.auth().currentUser;
 
-    const { classes, theme } = this.props;
-
-    return (
-      <MuiThemeProvider theme={customTheme}>
+    let main;
+    if (this.state.isSignedIn === SignedInState.SIGNED_OUT) {
+      main = <Login />;
+    } else if (this.state.isSignedIn === SignedInState.LOADING) {
+      main = (
+        <Typography className={classes.loading} variant="h4">
+          <em>Loading...</em>
+        </Typography>
+      );
+    } else {
+      main = (
         <div className={classes.root}>
           <CssBaseline />
           <AppBar
@@ -335,8 +340,10 @@ class App extends React.Component<Props, State> {
             </DialogActions>
           </Dialog>
         </div>
-      </MuiThemeProvider>
-    );
+      );
+    }
+
+    return <MuiThemeProvider theme={customTheme}>{main}</MuiThemeProvider>;
   }
 }
 
